@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -6,6 +6,7 @@
     <style>
         body {
             margin: 0;
+            overflow: hidden; /* Prevent scrollbars */
         }
 
         canvas {
@@ -27,8 +28,8 @@
         function init() {
             // Scene setup
             scene = new THREE.Scene();
-            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-            camera.position.set(0, 1, 2);
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100);
+            camera.position.set(0, 0, 3); // Adjusted camera position
 
             // Renderer setup
             renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -41,13 +42,26 @@
             const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
             scene.add(directionalLight);
 
-            // Model loading
+            // Instantiate a loader
             const loader = new GLTFLoader();
-            loader.load('models/uploads_files_3074097_Rigged+model.gltf', function (gltf) {
-                scene.add(gltf.scene);
-            }, undefined, function (error) {
-                console.error('An error happened:', error);
-            });
+
+            // Load a glTF resource
+            loader.load(
+                // resource URL
+                'models/uploads_files_3074097_Rigged+model.gltf',
+                // called when the resource is loaded
+                function (gltf) {
+                    scene.add(gltf.scene);
+                },
+                // called while loading is progressing
+                function (xhr) {
+                    console.log((xhr.loaded / xhr.total * 100) + '% loaded');
+                },
+                // called when loading has errors
+                function (error) {
+                    console.log('An error happened');
+                }
+            );
         }
 
         function animate() {
@@ -57,4 +71,3 @@
     </script>
 </body>
 </html>
-
