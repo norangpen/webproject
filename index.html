@@ -6,7 +6,7 @@
     <style>
         body {
             margin: 0;
-            overflow: hidden; /* Prevent scrollbars */
+            overflow: hidden;
         }
 
         canvas {
@@ -26,13 +26,20 @@
 
         function init() {
             scene = new THREE.Scene();
+            scene.background = new THREE.Color(0xAAAAAA); // Set a gray background
+
             camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
             camera.position.set(0, 0, 5);
 
-            const light = new THREE.AmbientLight(0xffffff); // Soft white light
-            scene.add(light);
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+            scene.add(ambientLight);
+
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+            directionalLight.position.set(0, 1, 1);
+            scene.add(directionalLight);
 
             renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setClearColor(0xAAAAAA); // Set renderer clear color to gray
             renderer.setSize(window.innerWidth, window.innerHeight);
             document.body.appendChild(renderer.domElement);
 
